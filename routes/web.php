@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Http\Response;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,4 +35,27 @@ Route::group(['prefix'=>'home'],function(){
     Route::get('/logout','PagesController@getLogOut');
     Route::get('/checkout','PagesController@getCheckOut');
     Route::post('/checkout','PagesController@postCheckOut');
+});
+Route::get('/ok','TestDuLieu@getView');
+Route::get('/test','TestDuLieu@getTest');
+
+Route::group(["prefix"=>"username"],function(){
+    Route::get('/project/user={id}/la={ok}',[App\Http\Controllers\TestDuLieu::class,'getUser'])->name('duykhanh');
+    Route::get('/testhu',[App\Http\Controllers\TestDuLieu::class,'ChoiThu'])->name('TestThu');
+});
+
+Route::get("/cookie",function(){
+    // $res = new Response();
+    // $res->withCookie(
+    //     "user","Khanh",10
+    // );
+    // return $res;
+    $item = [
+        "username"=>"OK",
+        "password"=>"123456",
+    ];
+    Cookie::queue("user",serialize($item),10);
+});
+Route::get("/getcookie",function(Request $request){
+    return $request->cookie("user");
 });
